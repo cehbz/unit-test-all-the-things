@@ -25,15 +25,19 @@ public:
 
 extern DHT_ DHT;
 
-class DHTMock {
+class DHTMock : public DHT_ {
 public:
   MOCK_METHOD0(begin, void());
-  MOCK_METHOD2(readTemperature, float(bool, bool));
+  MOCK_METHOD2(readTemperatureImpl, float(bool, bool));
+  virtual float readTemperature(bool S=false, bool force=false) { return readTemperatureImpl(S, force); }
   MOCK_METHOD1(convertCtoF, float(float));
   MOCK_METHOD1(convertFtoC, float(float));
-  MOCK_METHOD3(computeHeatIndex, float(float, float, bool));
-  MOCK_METHOD1(readHumidity, float(bool));
-  MOCK_METHOD1(read, boolean(bool));
+  MOCK_METHOD3(computeHeatIndexImpl, float(float, float, bool));
+  virtual float computeHeatIndex(float temperature, float percentHumidity, bool isFahrenheit=true) { return computeHeatIndexImpl(temperature, percentHumidity, isFahrenheit); };
+  MOCK_METHOD1(readHumidityImpl, float(bool));
+  virtual float readHumidity(bool force=false) { return readHumidityImpl(force); }
+  MOCK_METHOD1(readImpl, boolean(bool));
+  virtual boolean read(bool force=false) { return readImpl(force); };
 };
 
 DHTMock* DHTMockInstance();
