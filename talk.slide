@@ -4,67 +4,81 @@ Unit Test All The Things
 Charles Haynes
 ceh@ceh.bz
 
-* What is a unit test?
+* Unit tests are
 
+Small
 Fast
 Specific
 Independent
 
-* What isn't a unit test?
+* A test is not a unit test if:
 
-"A test is not a unit test if:
+- It talks to the database
+- It communicates across the network
+- It touches the file system
+- It can't run at the same time as any of your other unit tests
+- You have to do special things to your environment (such as editing config files) to run it.
 
-* It talks to the database
-* It communicates across the network
-* It touches the file system
-* It can't run at the same time as any of your other unit tests
-* You have to do special things to your environment (such as editing config files) to run it.
+Tests that do these things aren't bad. Often they are worth writing, and they can be written in a unit test harness. However, it is important to be able to separate them from true unit tests so that we can keep a set of tests that we can run fast whenever we make our changes.
 
-Tests that do these things aren't bad. Often they are worth writing, and they can be written in a unit test harness. However, it is important to be able to separate them from true unit tests so that we can keep a set of tests that we can run fast whenever we make our changes."
+-- Michael Feathers
 
--- Michael Feathers [1]
+* So what?
 
-* Why should I care?
-
-Debugging is hard
-Unit tests allow fearless experimentation
+Debugging is really hard
+Unit tests are easy
 Making code testable improves it
 
-* How do you unit test things?
+* How can you test things?
 
 Hardware
 Software emulation
 Native: On device
-Cross environment: Mocking APIs [4]
+Cross environment: Mocking APIs
 
 * Hardware
 
 Emulation (ICE)
 JTAG
 Boundary Scan
-Not unit tests
+*Not*unit*tests*
 
 * Software Emulation and Simulation
 
 QEMU
- Supports Xtensa (ESP8266) [2]
- Adding Atmel AVR (Arduino) [3]
- Simulators [5]
- Not unit tests
+
+- Supports Xtensa (ESP8266)
+- Adding Atmel AVR (Arduino)
+
+Simulators
+ *Not*unit*tests*
 
 * Native (on device) Testing
 
 Power On Self Test
 Out of service tests
 In service monitoring
-Not unit tests [6]
+*Not*unit*tests*
 
-* Cross environment: Mocking APIs [4]
+* Unit tests
 
-* Concretely: data logger
+* Concretely: temperature data logger
 
+Start with Adafruit DHT11 example code
 Receive readings from an external sensor
-Periodically post them to a server
+
+.code DHTtester.h /Reading temperature/,/readTemperature\(\)/
+
+Write them to Serial
+
+.code DHTtester.h /Serial.print\("Humidity: "\)/,/Serial.print\(t\)/
+
+* Using Google Test + arduino-mock
+
+Google Test is a C++ testing and mocking framework
+arduino-mock is a Google Mock stub library for Arduino
+
+.code install.sh /git clone/,$
 
 * Decompose
 
@@ -86,48 +100,16 @@ Design for testability
 Automate
 
 * References
-[1] "A Set of Unit Testing Rules" http://www.artima.com/weblogs/viewpost.jsp?thread=126923
-[2] "QEMU support for Xtensa" http://wiki.osll.ru/doku.php/etc:users:jcmvbkbc:qemu-target-xtensa
-[3] "CanTireInnovations/esp8266-geolocation-publisher" https://github.com/CanTireInnovations/esp8266-geolocation-publisher/blob/master/test/GeolocationMessage_Tests.cpp
-[4] "target-avr: AVR cores support is added" https://lists.gnu.org/archive/html/qemu-devel/2016-07/msg00098.html
-[5] "ESP8266 Simulator (Allows Native Code to Link/Run on Linux)" https://github.com/afnid/espsim
-[6] "ArduinoUnit is a unit testing framework for Arduino libraries" https://github.com/mmurdoch/arduinounit
-[7] "Arduino Unit Testing Helper Library" http://code.google.com/p/arduino-unit-test-helper-library
-
-* ArduinoUnit
-
-On Device
-
-https://github.com/mmurdoch/arduinounit
-
-* GMock/GTest
-
-https://github.com/google/googletest
-arduino-mock https://github.com/wjszlachta/arduino-mock
-
-```
-cp -a  ~/projects/personal/arduino-mock/{CMakeLists.txt,build.sh} .
-cp -a ~/projects/personal/arduino-mock/src .
-mkdir lib
-cp -a ~/projects/personal/arduino-mock/lib/gtest lib
-mkdir include
-cp -a ~/projects/personal/arduino-mock/include/arduino-mock include
-bash -x build.sh test
-```
-
-
-
-* Fake Function Framework (fff)
-
-https://github.com/usr42/fff
-
-* CMock
-
-C only
-Needs Ceedling?
-
-https://github.com/ThrowTheSwitch/CMock
-
-* PlatformIO
-
-http://docs.platformio.org/en/latest/what-is-platformio.html
+[[http://www.artima.com/weblogs/viewpost.jsp?thread=126923][A Set of Unit Testing Rules]]
+[[http://wiki.osll.ru/doku.php/etc:users:jcmvbkbc:qemu-target-xtensa][QEMU support for Xtensa]]
+[[https://github.com/CanTireInnovations/esp8266-geolocation-publisher/blob/master/test/GeolocationMessage_Tests.cpp][CanTireInnovations/esp8266-geolocation-publisher]]
+[[https://lists.gnu.org/archive/html/qemu-devel/2016-07/msg00098.html][target-avr: AVR cores support is added]]
+[[https://github.com/afnid/espsim][ESP8266 Simulator (Allows Native Code to Link/Run on Linux)]]
+[[https://github.com/mmurdoch/arduinounit][ArduinoUnit is a unit testing framework for Arduino libraries]]
+[[http://code.google.com/p/arduino-unit-test-helper-library][Arduino Unit Testing Helper Library]]
+[[https://github.com/google/googletest][Google Test]]
+[[https://github.com/wjszlachta/arduino-mock][Arduino Mock]]
+[[https://github.com/mmurdoch/arduinounit][On Device testing]]
+[[https://github.com/usr42/fff][Fake Function Framework (fff)]]
+[[https://github.com/ThrowTheSwitch/CMock][CMock, C only, needs Ceedling]]
+[[http://docs.platformio.org/en/latest/what-is-platformio.html][PlatformIO, alternative IDE, built in unit testing framework]]
