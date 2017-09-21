@@ -80,18 +80,23 @@ arduino-mock is a Google Mock stub library for Arduino
 
 .code install.sh /git clone/,$
 
-* Decompose
+* Mock your dependencies
 
-Write your code in testable pieces
+.code include/arduino-mock/DHT.h /class DHTMock/,/^}/
 
-* Manage dependencies
+* Inject them
 
-Mock
-Inject
+.code DHTtester.h /START OMIT/,/END OMIT/
 
-* Automate
+* Write your tests
 
-Make it part of your build process
+.code test/DHTtester_unit_test.cpp /loop/
+.code test/DHTtester_unit_test.cpp /ArduinoMock/+1,/float tempC/
+.code test/DHTtester_unit_test.cpp /readHumidityImpl/,+3
+.code test/DHTtester_unit_test.cpp /Matcher<double>/,+1
+.code test/DHTtester_unit_test.cpp /dhttester.loop/,/releaseSerial/
+
+* Profit!
 
 * Summary
 
@@ -100,6 +105,7 @@ Design for testability
 Automate
 
 * References
+[[https://github.com/charles-haynes/unit-test-all-the-things][git repo: Unit Test All the Things!]]
 [[http://www.artima.com/weblogs/viewpost.jsp?thread=126923][A Set of Unit Testing Rules]]
 [[http://wiki.osll.ru/doku.php/etc:users:jcmvbkbc:qemu-target-xtensa][QEMU support for Xtensa]]
 [[https://github.com/CanTireInnovations/esp8266-geolocation-publisher/blob/master/test/GeolocationMessage_Tests.cpp][CanTireInnovations/esp8266-geolocation-publisher]]
