@@ -12,4 +12,4 @@ besides that, this repo contains a mock for the DHT library, and unit tests for 
 `go get -u -v golang.org/x/tools/cmd/present`
 and run `present` in this directory
 
-or visit [[ https://go-talks.appspot.com/github.com/charles-haynes/unit-test-all-the-things/talk.slide#1]]
+or visit https://go-talks.appspot.com/github.com/charles-haynes/unit-test-all-the-things/talk.slide#1
