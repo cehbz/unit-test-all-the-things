@@ -32,39 +32,29 @@ Making code testable improves it
 * How can you test things?
 
 Hardware
+
+: Emulation (ICE)
+: JTAG
+: Boundary Scan
+
 Software emulation
+
+: QEMU
+
 Native: On device
+
+: Power On Self Test
+: Out of service tests
+: In service monitoring
+
 Cross environment: Mocking APIs
-
-* Hardware
-
-Emulation (ICE)
-JTAG
-Boundary Scan
-*Not*unit*tests*
-
-* Software Emulation and Simulation
-
-QEMU
-
-- Supports Xtensa (ESP8266)
-- Adding Atmel AVR (Arduino)
-
-Simulators
- *Not*unit*tests*
-
-* Native (on device) Testing
-
-Power On Self Test
-Out of service tests
-In service monitoring
-*Not*unit*tests*
 
 * Unit tests
 
 * Concretely: temperature data logger
 
 Start with Adafruit DHT11 example code
+
 Receive readings from an external sensor
 
 .code DHTtester.h /Reading temperature/,/readTemperature\(\)/
@@ -73,30 +63,35 @@ Write them to Serial
 
 .code DHTtester.h /Serial.print\("Humidity: "\)/,/Serial.print\(t\)/
 
-* Using Google Test + arduino-mock
+* Decompose
 
-Google Test is a C++ testing and mocking framework
-arduino-mock is a Google Mock stub library for Arduino
+.code DHTtester.h /class DHTImpl/,/dht->begin/+2
 
-.code install.sh /git clone/,$
+* Isolate
 
-* Mock your dependencies
+Mock your external dependencies
 
-.code include/arduino-mock/DHT.h /class DHTMock/,/^}/
+.code include/DHT.h /class DHT/,/convertCtoF/
+.code include/arduino-mock/DHT.h /class DHTMock/,/convertCtoF/
 
-* Inject them
+* Test
 
-.code DHTtester.h /START OMIT/,/END OMIT/
+* Framework
 
-* Write your tests
+*Google*Test:* C++ testing and mocking
+*arduino-mock:* Google Test stub library for Arduino
+
+* Test: setup
+
+.code test/DHTtester_unit_test.cpp /setup/,/^}/
+
+* Test: loop
 
 .code test/DHTtester_unit_test.cpp /loop/
 .code test/DHTtester_unit_test.cpp /ArduinoMock/+1,/float tempC/
 .code test/DHTtester_unit_test.cpp /readHumidityImpl/,+3
 .code test/DHTtester_unit_test.cpp /Matcher<double>/,+1
 .code test/DHTtester_unit_test.cpp /dhttester.loop/,/releaseSerial/
-
-* Profit!
 
 * Summary
 

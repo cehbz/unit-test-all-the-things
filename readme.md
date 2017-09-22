@@ -1,5 +1,5 @@
 # Unit Test All the Things
-Git repo and slides for talk at Yow Connect! Sep 2017
+Git repo and slides for talk at YOW! Connected 2017
 
 run `install.sh` to get Google Test, Google Mock, and arduino-mock, and run the tests
 `git checkout .` to put back our local changes

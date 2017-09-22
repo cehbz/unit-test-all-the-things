@@ -3,7 +3,6 @@
 
 #include <DHT.h>
 
-// START OMIT
 template <class DHTImpl>
 class DHTtester {
 private:
@@ -23,7 +22,6 @@ void DHTtester<DHTImpl>::setup() {
     dht->begin();
   }
 }
-// END OMIT
 
 template <class DHTImpl>
 void DHTtester<DHTImpl>::loop() {
